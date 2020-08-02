@@ -7,6 +7,11 @@ import {
 import PollItem from './PollItem';
 
 export default class Poll extends React.Component{
+	componentDidMount(){
+		let polls = this.props.polls
+		console.log(polls)
+	}
+
 	render() {
 		try{
 			return this.props.polls.map((poll) => (

@@ -15,7 +15,7 @@ export default class PollItem extends React.Component{
 	}
 
 	render(){
-		const { id, title, text, yesVotes, noVotes, voted, yesPercent, noPercent, choiceOne, choiceTwo, isExpired } = this.props.poll;
+		const { uid, title, text, yesVotes, noVotes, yesPercent, noPercent, choiceOne, choiceTwo, isExpired } = this.props.poll;
 		if (!isExpired){
 			return (
 				<Col md="4" style={{padding: '2%'}}>
@@ -33,26 +33,26 @@ export default class PollItem extends React.Component{
 							<Row>
 								<Col>
 									<Button 
-										className={id+'poll'}
+										className={uid+'poll'}
 										variant="success" 
 										style={{width: '100%'}} 
-										onClick={(e) => {this.props.voteYes(e.target, id)}}>
+										onClick={(e) => {this.props.voteYes(e.target, uid)}}>
 										{choiceOne}
 									</Button>
 								</Col>
 								<Col>
 									<Button 
-										className={id+'poll'}
+										className={uid+'poll'}
 										variant="danger" 
 										style={{width: '100%'}} 
-										onClick={(e) => {this.props.voteNo(e.target, id)}}>
+										onClick={(e) => {this.props.voteNo(e.target, uid)}}>
 										{choiceTwo}
 									</Button>
 								</Col>
 							</Row>
 							<Row>
 								<Col>
-									<p style={{marginTop: '10px'}}>{voted} { voted === 1 ? 'person has' : 'people have' }  voted</p>
+									<p style={{marginTop: '10px'}}>{yesVotes+noVotes} { (yesVotes+noVotes) === 1 ? 'person has' : 'people have' }  voted</p>
 									<p style={{marginTop: '5px'}}>
 									<Row>
 										<Col>
@@ -94,7 +94,7 @@ export default class PollItem extends React.Component{
 							</Card.Text>
 							<Row>
 								<Col>
-									<p style={{marginTop: '10px'}}>{voted} { voted === 1 ? 'person' : 'people' }  voted</p>
+									<p style={{marginTop: '10px'}}>{yesVotes+noVotes} { (yesVotes+noVotes) === 1 ? 'person' : 'people' }  voted</p>
 									<p style={{marginTop: '5px'}}>
 									<Row>
 										<Col>

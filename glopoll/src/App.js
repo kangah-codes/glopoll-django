@@ -15,59 +15,71 @@ var newUser;
 class App extends React.Component {
 	constructor() {
 		super();
-
-		newUser = new User('1');
-		let storedpolls = localStorage.getItem('polls');
-		try {
-			storedpolls = JSON.parse(storedpolls);
-		}catch(e){
-			console.error(e);
-		}
 		
 		this.state = {
-			polls: !storedpolls ? [] : storedpolls
+			polls: []
 		}
+	}
 
-		localStorage.setItem('polls', JSON.stringify(this.state.polls))
+	componentDidMount(){
+		let data = []
+		axios.get(`http://127.0.0.1:5000/get_polls/`)
+		.then(res => {
+			JSON.parse(res.data).map((item) => {
+				data.push(item.fields)
+			})
+			this.setState({ 
+				polls: data 
+			});
+		})
 	}
 
 	voteYes = (e, id) => {
-		if (!newUser.getPoll().includes(id)){
-			var btnArray = document.getElementsByClassName(`${id}poll`);
-			for (let i=0; i<btnArray.length; i++){
-				btnArray[i].disabled = true;
-			}
+		let data = []
+		axios.get(`http://127.0.0.1:5000/vote/${id}/yes/`)
+		.then(res => {
+			JSON.parse(res.data).map((item) => {
+				data.push(item.fields)
+			})
+			this.setState({ 
+				polls: data 
+			});
+
 			this.setState(this.state.polls.map((poll) => {
-				if (poll.id === id){
-					poll.yesVotes += 1
-					poll.voted += 1
-					newUser.addPoll(poll.id);
+				if (poll.uid === id){
 					this.findPercent(id);
 				}
 			}))
-			newUser.addPoll(id);
-			localStorage.setItem('polls', JSON.stringify(this.state.polls))
-		}
-		
+		})
+		.catch(err => {
+			if (err.response.status === 501){
+				// pass
+			}
+		})
 	}
 
 	voteNo = (e, id) => {
-		if (!newUser.getPoll().includes(id)){
-			var btnArray = document.getElementsByClassName(`${id}poll`);
-			for (let i=0; i<btnArray.length; i++){
-				btnArray[i].disabled = true;
-			}
+		let data = []
+		axios.get(`http://127.0.0.1:5000/vote/${id}/no/`)
+		.then(res => {
+			JSON.parse(res.data).map((item) => {
+				data.push(item.fields)
+			})
+			this.setState({ 
+				polls: data 
+			});
+
 			this.setState(this.state.polls.map((poll) => {
-				if (poll.id === id){
-					poll.noVotes += 1
-					poll.voted += 1
-					newUser.addPoll(poll.id);
+				if (poll.uid === id){
 					this.findPercent(id);
 				}
 			}))
-			newUser.addPoll(id);
-			localStorage.setItem('polls', JSON.stringify(this.state.polls))
-		}
+		})
+		.catch(err => {
+			if (err.response.status === 501){
+				// pass
+			}
+		})
 	}
 	
 
@@ -88,20 +100,6 @@ class App extends React.Component {
 			}
 		}))
 	}
-
-	successPoll = () => {	  
-		return (
-			<Alert variant="success" onClose={() => setShow(false)} dismissible>
-				<Alert.Heading>Oh snap! You got an error!</Alert.Heading>
-				<p>
-					Change this and that and try again. Duis mollis, est non commodo
-					luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
-					Cras mattis consectetur purus sit amet fermentum.
-				</p>
-			</Alert>
-		);
-	}
-
 
 	addPoll = (e) => {
 		e.preventDefault();
@@ -153,16 +151,14 @@ class App extends React.Component {
 			isExpired: false,
 		}]))
 
-		this.successPoll()
-
-		// window.location.href = '/'
+		window.location.href = '/'
 	}
 
 	render() {
 		let polls = JSON.parse(localStorage.getItem('polls'));
 		return (
 			<div>
-		    	<NavBar polls={polls} voteYes={this.voteYes} voteNo={this.voteNo} killPoll={this.killPoll} addPoll={this.addPoll} />
+		    	<NavBar polls={this.state.polls} voteYes={this.voteYes} voteNo={this.voteNo} killPoll={this.killPoll} addPoll={this.addPoll} />
 			</div>
 		);
 	}
