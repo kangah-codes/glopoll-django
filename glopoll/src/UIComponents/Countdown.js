@@ -11,23 +11,25 @@ export default class Countdown extends React.Component{
 	};
 
 	componentDidMount(){
-		this.interval = setInterval(() => {
-			const { timeTillDate, timeFormat } = this.props;
-            const then = moment(timeTillDate, timeFormat);
-            const now = moment();
-            const countdown = moment(then - now);
-            const hours = countdown.format('HH');
-            const minutes = countdown.format('mm');
-            const seconds = countdown.format('ss');
+        this.interval = setInterval(() => {
+            const { timeTillDate, timeFormat } = this.props
+            const then = moment(timeTillDate, timeFormat)
+            const now = moment()
+            let duration = moment.duration(moment(then).diff(moment(now)))
+            const hours = duration._data.hours
+            const minutes = duration._data.minutes
+            const seconds = duration._data.seconds
 
-            if (hours == 0 && minutes == 0 && seconds == 0){
-            	this.props.killPoll(this.props.poll.id);
+            if (parseInt(minutes, 10) < 0 && parseInt(seconds, 10) < 0){
+                console.log(hours, minutes, seconds)
+                console.log(this.props.poll)
+                this.props.killPoll(this.props.poll.uid)
             }
 
-            this.setState({ hours, minutes, seconds });
-        }, 1000);
-	}
-
+            this.setState({ hours, minutes, seconds })
+        }, 1000)
+    }
+    
 	componentWillUnmount() {
 
         if (this.interval) {

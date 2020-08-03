@@ -47,10 +47,11 @@ export default class Create extends React.Component{
 					</Form.Row>
 				</Form.Group>
 
-				<Form.Group controlId="formBasicRange">
-			    	<Form.Label>Poll will expire in: {this.state.time < 1 ? this.state.time*60 : this.state.time} {this.state.time < 1 ? 'minutes' : 'hours' }</Form.Label>
-			    	<Form.Control type="range" min="0.1" max="24" step="0.1" onChange={(e) => {this.setTimer(e)}} name="expire" />
-			  	</Form.Group>
+				<Form.Row>
+					<Col>
+						<h4>Poll will expire in 24 hours</h4>
+					</Col>
+				</Form.Row>
 
 				<Button variant="success" type="submit">
 					Create

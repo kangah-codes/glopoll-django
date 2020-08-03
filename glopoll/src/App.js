@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import User from './Logic/UserProfile';
 import {v4 as uuid} from 'uuid';
 import axios from 'axios';
+import moment from 'moment';
 
 
 // global variable
@@ -94,9 +95,10 @@ class App extends React.Component {
 
 	killPoll = (id) => {
 		this.setState(this.state.polls.map((poll) => {
-			if (poll.id === id){
+			console.log(id, poll.uid)
+			if (poll.uid === id){
 				poll.isExpired = true;
-				localStorage.setItem('polls', JSON.stringify(this.state.polls))
+				// localStorage.setItem('polls', JSON.stringify(this.state.polls))
 			}
 		}))
 	}
@@ -116,52 +118,15 @@ class App extends React.Component {
 				noPercent: 0,
 				choiceOne: e.target.choiceOne.value,
 				choiceTwo: e.target.choiceTwo.value,
-				willExpireOn: new Date().toLocaleString(),
+				willExpireOn: moment(new Date(new Date().getTime() + 60 * 60 * 24 * 1000)).format('YYYY-MM-DD HH:mm'),
 				isExpired: false,
 			})
 		})
 		.then((response) => {
-			console.log(response);
+			window.location.href = '/'
 		}, (error) => {
 			console.log(error);
 		});
-		  
-		// this.setState({
-		// 	polls: [
-		// 		...JSON.parse(localStorage.getItem('polls')), 
-		// 		{
-		// 			id: id,
-		// 			title: e.target.title.value,
-		// 			text: e.target.description.value,
-		// 			yesVotes: 0,
-		// 			noVotes: 0,
-		// 			voted: 0,
-		// 			yesPercent: 0,
-		// 			noPercent: 0,
-		// 			choiceOne: e.target.choiceOne.value,
-		// 			choiceTwo: e.target.choiceTwo.value,
-		// 			willExpireOn: time,
-		// 			isExpired: false,
-		// 		}
-		// 	]
-		// });
-
-		// localStorage.setItem('polls', JSON.stringify([...this.state.polls, {
-		// 	id: id,
-		// 	title: e.target.title.value,
-		// 	text: e.target.description.value,
-		// 	yesVotes: 0,
-		// 	noVotes: 0,
-		// 	voted: 0,
-		// 	yesPercent: 0,
-		// 	noPercent: 0,
-		// 	choiceOne: e.target.choiceOne.value,
-		// 	choiceTwo: e.target.choiceTwo.value,
-		// 	willExpireOn: time,
-		// 	isExpired: false,
-		// }]))
-
-		// window.location.href = '/'
 	}
 
 	render() {

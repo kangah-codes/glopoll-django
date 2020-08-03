@@ -45,7 +45,12 @@ def add_poll(request):
             text = response.get('text'),
             choiceOne = response.get('choiceOne'),
             choiceTwo = response.get('choiceTwo'),
-            willExpireOn = datetime.datetime.fromtimestamp(response.get('willExpireOn')),
+            willExpireOn = response.get('willExpireOn'),
+            yesVotes = 0,
+            noVotes = 0,
+            yesPercent = 0.0,
+            noPercent = 0.0,
+            isExpired = False
         )
         poll.save()
         return HttpResponse("Success", status=201)

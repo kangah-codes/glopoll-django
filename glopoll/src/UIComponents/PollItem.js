@@ -76,7 +76,7 @@ export default class PollItem extends React.Component{
 							</Row>
 							<Row>
 								<Col>
-									<Countdown timeTillDate={this.props.poll.willExpireOn} timeFormat="h:mm a" poll={this.props.poll} killPoll={this.props.killPoll}/>
+									<Countdown timeTillDate={this.props.poll.willExpireOn} timeFormat="YYYY-MM-DD HH:mm" poll={this.props.poll} killPoll={this.props.killPoll}/>
 								</Col>
 							</Row>
 						</Card.Body>

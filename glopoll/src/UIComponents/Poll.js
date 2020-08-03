@@ -14,6 +14,17 @@ export default class Poll extends React.Component{
 
 	render() {
 		try{
+			if (this.props.polls.length == 0){
+				return (
+					<div className="container">
+						<Row>
+							<Col>
+								<h1>No Polls</h1>
+							</Col>
+						</Row>
+					</div>
+				)
+			}
 			return this.props.polls.map((poll) => (
 				<PollItem key={poll.id} poll={poll} voteYes={this.props.voteYes} voteNo={this.props.voteNo} killPoll={this.props.killPoll} />
 			))
@@ -22,7 +33,7 @@ export default class Poll extends React.Component{
 				<div className="container">
 					<Row>
 						<Col>
-							<h1>No Polls</h1>
+							<h1>An error occured</h1>
 						</Col>
 					</Row>
 				</div>
