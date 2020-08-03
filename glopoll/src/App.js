@@ -86,7 +86,7 @@ class App extends React.Component {
 
 	findPercent = (id) => {
 		this.setState(this.state.polls.map((poll) => {
-			if (poll.id === id){
+			if (poll.uid === id){
 				poll.yesPercent = (poll.yesVotes/poll.voted)*100;
 				poll.noPercent = (poll.noVotes/poll.voted)*100;
 			}
