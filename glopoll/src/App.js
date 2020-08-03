@@ -105,7 +105,7 @@ class App extends React.Component {
 		e.preventDefault();
 
 		axios.post('http://127.0.0.1:5000/add_poll/', {
-			data: {
+			data: JSON.stringify({
 				uid: uuid(),
 				title: e.target.title.value,
 				text: e.target.description.value,
@@ -118,7 +118,7 @@ class App extends React.Component {
 				choiceTwo: e.target.choiceTwo.value,
 				willExpireOn: new Date().toLocaleString(),
 				isExpired: false,
-			}
+			})
 		})
 		.then((response) => {
 			console.log(response);

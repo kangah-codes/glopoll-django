@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 from .utils import *
 from django.views.decorators.csrf import csrf_exempt
 import json
+import datetime
 
 
 # Create your views here.
@@ -35,17 +36,16 @@ def vote(request, pollId, condition):
 
 @csrf_exempt
 def add_poll(request):
-    response = request.POST
-    print(response)
+    response = json.loads(request.body.decode('utf-8')).get('data')
+    response = json.loads(response)
     try:
-        print(response.get('uid'))
         poll = Poll(
             uid = response.get('uid'),
             title = response.get('title'),
             text = response.get('text'),
             choiceOne = response.get('choiceOne'),
             choiceTwo = response.get('choiceTwo'),
-            willExpireOn = response.get('willExpireOn'),
+            willExpireOn = datetime.datetime.fromtimestamp(response.get('willExpireOn')),
         )
         poll.save()
         return HttpResponse("Success", status=201)
