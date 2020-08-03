@@ -16,3 +16,5 @@ The template directory is already specified in the settings file
 
 ![img](img2.png)
 
+# todo
+implement sessions to prevent multiple voting
