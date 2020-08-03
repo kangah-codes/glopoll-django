@@ -20,9 +20,7 @@ export default class Countdown extends React.Component{
             const minutes = duration._data.minutes
             const seconds = duration._data.seconds
 
-            if (parseInt(minutes, 10) < 0 && parseInt(seconds, 10) < 0){
-                console.log(hours, minutes, seconds)
-                console.log(this.props.poll)
+            if (Math.sign(parseInt(hours, 10)) == -1){
                 this.props.killPoll(this.props.poll.uid)
             }
 

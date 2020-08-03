@@ -98,7 +98,6 @@ class App extends React.Component {
 			console.log(id, poll.uid)
 			if (poll.uid === id){
 				poll.isExpired = true;
-				// localStorage.setItem('polls', JSON.stringify(this.state.polls))
 			}
 		}))
 	}
