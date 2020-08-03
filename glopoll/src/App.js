@@ -103,55 +103,65 @@ class App extends React.Component {
 
 	addPoll = (e) => {
 		e.preventDefault();
-		let timer = e.target.expire.value.toString().replace('.', ' ').split(' ')
-		let now = new Date();
-		let hour = now.getHours();
-		let minutes = now.getMinutes();
-		timer[0] = parseInt(timer[0], 10)
-		timer[1] = parseInt(timer[1], 10)
-		if (timer[0] == 0){
-			var time = `${hour} ${(timer[1]+(minutes))}`
-		}else{
-			var time = `${(timer[0]+hour)%12} ${(timer[1]+minutes)}`
-		}
-		let id = uuid();
-		  
-		this.setState({
-			polls: [
-				...JSON.parse(localStorage.getItem('polls')), 
-				{
-					id: id,
-					title: e.target.title.value,
-					text: e.target.description.value,
-					yesVotes: 0,
-					noVotes: 0,
-					voted: 0,
-					yesPercent: 0,
-					noPercent: 0,
-					choiceOne: e.target.choiceOne.value,
-					choiceTwo: e.target.choiceTwo.value,
-					willExpireOn: time,
-					isExpired: false,
-				}
-			]
+
+		axios.post('http://127.0.0.1:5000/add_poll/', {
+			data: {
+				uid: uuid(),
+				title: e.target.title.value,
+				text: e.target.description.value,
+				yesVotes: 0,
+				noVotes: 0,
+				voted: 0,
+				yesPercent: 0,
+				noPercent: 0,
+				choiceOne: e.target.choiceOne.value,
+				choiceTwo: e.target.choiceTwo.value,
+				willExpireOn: new Date().toLocaleString(),
+				isExpired: false,
+			}
+		})
+		.then((response) => {
+			console.log(response);
+		}, (error) => {
+			console.log(error);
 		});
+		  
+		// this.setState({
+		// 	polls: [
+		// 		...JSON.parse(localStorage.getItem('polls')), 
+		// 		{
+		// 			id: id,
+		// 			title: e.target.title.value,
+		// 			text: e.target.description.value,
+		// 			yesVotes: 0,
+		// 			noVotes: 0,
+		// 			voted: 0,
+		// 			yesPercent: 0,
+		// 			noPercent: 0,
+		// 			choiceOne: e.target.choiceOne.value,
+		// 			choiceTwo: e.target.choiceTwo.value,
+		// 			willExpireOn: time,
+		// 			isExpired: false,
+		// 		}
+		// 	]
+		// });
 
-		localStorage.setItem('polls', JSON.stringify([...this.state.polls, {
-			id: id,
-			title: e.target.title.value,
-			text: e.target.description.value,
-			yesVotes: 0,
-			noVotes: 0,
-			voted: 0,
-			yesPercent: 0,
-			noPercent: 0,
-			choiceOne: e.target.choiceOne.value,
-			choiceTwo: e.target.choiceTwo.value,
-			willExpireOn: time,
-			isExpired: false,
-		}]))
+		// localStorage.setItem('polls', JSON.stringify([...this.state.polls, {
+		// 	id: id,
+		// 	title: e.target.title.value,
+		// 	text: e.target.description.value,
+		// 	yesVotes: 0,
+		// 	noVotes: 0,
+		// 	voted: 0,
+		// 	yesPercent: 0,
+		// 	noPercent: 0,
+		// 	choiceOne: e.target.choiceOne.value,
+		// 	choiceTwo: e.target.choiceTwo.value,
+		// 	willExpireOn: time,
+		// 	isExpired: false,
+		// }]))
 
-		window.location.href = '/'
+		// window.location.href = '/'
 	}
 
 	render() {

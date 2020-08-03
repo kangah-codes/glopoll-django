@@ -6,6 +6,9 @@ from django.core import serializers
 from .models import *
 from django.shortcuts import get_object_or_404
 from .utils import *
+from django.views.decorators.csrf import csrf_exempt
+import json
+
 
 # Create your views here.
 def index(request):
@@ -18,9 +21,7 @@ def get_polls(request):
     return JsonResponse(serializers.serialize("json", Poll.objects.all()), safe=False)
 
 def vote(request, pollId, condition):
-    print(get_cookie(request, pollId))
-    if not get_cookie(request, pollId):
-        request.session[str(pollId)] = 'True'
+    if not pollId in request.session:
         poll = get_object_or_404(Poll, uid=pollId)
         if condition == 'yes':
             poll.yesVotes += 1
@@ -29,8 +30,25 @@ def vote(request, pollId, condition):
         poll.yesPercent = ((poll.yesVotes)/(poll.yesVotes+poll.noVotes))*100
         poll.noPercent = ((poll.noVotes)/(poll.yesVotes+poll.noVotes))*100
         poll.save()
-        response = HttpResponse('setCookie')
-        set_cookie(response, pollId, 'True')
-        print(get_cookie(request, pollId))
         return JsonResponse(serializers.serialize("json", Poll.objects.all()), safe=False)
     return HttpResponse("Already voted", status=501)
+
+@csrf_exempt
+def add_poll(request):
+    response = request.POST
+    print(response)
+    try:
+        print(response.get('uid'))
+        poll = Poll(
+            uid = response.get('uid'),
+            title = response.get('title'),
+            text = response.get('text'),
+            choiceOne = response.get('choiceOne'),
+            choiceTwo = response.get('choiceTwo'),
+            willExpireOn = response.get('willExpireOn'),
+        )
+        poll.save()
+        return HttpResponse("Success", status=201)
+    except Exception as e:
+        print(e)
+        return HttpResponse('Error', status=500)
